@@ -5,9 +5,8 @@
 - **JUC**
     - [JUC](?file=001-JAVA/001-JUC/001-JUC "JUC")
 - **Java并发编程**
-    - **Java并发编程基础**
-        - [线程](?file=001-JAVA/010-Java并发编程/4-Java并发编程基础/4.1-线程 "线程")
-    - **Java中的锁**
+    - [Java并发编程基础](?file=001-JAVA/010-Java并发编程/01-Java并发编程基础 "Java并发编程基础")
+    - [Java中的锁](?file=001-JAVA/010-Java并发编程/02-Java中的锁 "Java中的锁")
 
 ##### 学习amWiki
 - [amWiki轻文库简介](?file=100-学习amWiki/01-amWiki轻文库简介 "amWiki轻文库简介")
