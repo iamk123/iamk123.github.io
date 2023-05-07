@@ -661,3 +661,225 @@ try (var ctx = new UserContext("Bob")) {
 
 
 ## 5 线程应用实例
+
+### 等待超时模式
+
+调用一个方法时等待一段时间，如果该方法能够在给定的时间之内得到结果，直接返回；反之，超时返回默认结果。
+
+```java
+    public synchronized Object get(long mills) {
+        long future = System.currentTimeMillis() + mills;
+        long remaining = mills;
+        while(result == null && remaining > 0) {
+            wait(remaining);
+            remaining = future - System.currentTimeMillis();
+        }
+
+        return result;
+    }
+```
+
+
+
+### 数据库连接池示例
+
+描述
+
+```
+使用等待超时模式构建一个简单的数据库连接池，模拟从连接池中获取、使用和释放连接的过程。
+客户端获取连接的过程被设定为等待超时的模式，1000ms内无法获取可用连接返回null。
+连接池大小为10，通过调用客户端的连线数来模拟无法获取连接的场景。
+```
+
+连接池 `ConnectionPool.java`
+
+```java
+package ConnectionPool;
+
+import java.sql.Connection;
+import java.util.LinkedList;
+
+public class ConnectionPool {
+
+    private LinkedList<Connection> pool = new LinkedList<>();
+
+    public ConnectionPool(int initialSize) {
+        if(initialSize <= 0) return;
+        for(int i = 0; i < initialSize; i++) {
+            pool.addLast(ConnectionDriver.createConnection());
+        }
+    }
+
+    public void releaseConnection(Connection connection) {
+        if(connection == null) return;
+        synchronized(pool) {
+            // 添加后需要进行通知，这样其他消费者能够感知到链接池中已经归还了一个链接
+            pool.addLast(connection);
+            pool.notifyAll();
+        }
+    }
+
+    // 在mills内无法获取到连接，将会返回null
+    public Connection fetchConnection(long mills) throws InterruptedException {
+        synchronized(pool) {
+            // 完全超时
+            if(mills <= 0) {
+                while(pool.isEmpty()) {
+                    pool.wait();
+                }
+
+                return pool.removeFirst();
+            } else {
+                long future = System.currentTimeMillis() + mills;
+                long remaining = mills;
+                while(pool.isEmpty() && remaining > 0) {
+                    pool.wait(remaining);
+                    remaining = future - System.currentTimeMillis();
+                }
+
+                Connection result = null;
+                if(!pool.isEmpty()) {
+                    result = pool.removeFirst();
+                }
+                return result;
+            }
+        }
+    }
+}
+```
+
+数据库连接驱动器
+
+```java
+package ConnectionPool;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * 这段代码主要实现了一个Connection的代理类。在Connection的代理类中，如果调用的方法是commit方法，就会休眠100毫秒。最后，代理类返回的结果是null。
+ *
+ * 这段代码的作用是模拟一个数据库连接的commit操作，以及在commit操作时的休眠效果。
+ * 通常情况下，数据库的commit操作需要一定的时间才能完成，因此在实际应用中需要通过代理类来模拟commit操作的耗时。
+ * 这样就能更好地测试代码在多线程环境下的可靠性。
+ *
+ * 这段代码的关键在于使用了代理类来实现Connection的commit操作。
+ * 在代理类中，如果调用的方法是commit方法，就会休眠100毫秒。
+ * 这种方式可以模拟commit操作需要一定的时间才能完成的情况。
+ * 同时，由于代理类返回的结果是null，因此在测试时需要根据实际情况进行判断。
+ */
+public class ConnectionDriver {
+
+    static class ConnectionHandler implements InvocationHandler {
+        // @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            if (method.getName().equals("commit")) {
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+            return null;
+        }
+    }
+
+
+    // 创建一个Connection的代理，在commit时休眠1秒
+    public static final Connection createConnection() {
+        return (Connection) Proxy.newProxyInstance(
+                ConnectionDriver.class.getClassLoader(),
+                new Class<?>[]{Connection.class},
+                new ConnectionHandler()
+        );
+    }
+}
+
+```
+
+测试
+
+```java
+package ConnectionPool;
+
+import java.sql.Connection;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+
+
+public class ConnectionPoolTest {
+    static ConnectionPool pool = new ConnectionPool(10);
+    static CountDownLatch start = new CountDownLatch(1);    // 相当于一个总开关，线程开启后阻塞在同一个地方，开启后所有线程统一执行
+    static CountDownLatch end;      // 打印日志的总开关，待所有线程执行解释后，再输出日志
+
+    static class ConnetionRunner implements Runnable {
+        int count;                  // 要起的线程数
+        AtomicInteger got;          // 记录获取到连接的数量
+        AtomicInteger notGot;       // 记录获取不到连接的数量
+
+        public ConnetionRunner(int count, AtomicInteger got, AtomicInteger notGot) {
+            this.count = count;
+            this.got = got;
+            this.notGot = notGot;
+        }
+
+        public void run() {
+            try {
+                start.await();  // 线程启动时先统一阻塞到该处，start.countDown();后统一执行
+            } catch (Exception ex) {
+
+            }
+            while (count > 0) {
+                try {
+                    // 从线程池中获取连接，如果1000ms内无法获取到，将会返回null
+                    // 分别统计连接获取的数量got和未获取到的数量notGot
+                    Connection connection = pool.fetchConnection(1000);
+                    if (connection != null) {
+                        try {
+                            connection.createStatement();
+                            connection.commit();
+                        } finally {
+                            pool.releaseConnection(connection);
+                            got.incrementAndGet();
+                        }
+                    } else {
+                        notGot.incrementAndGet();
+                    }
+                } catch (Exception ex) {
+                } finally {
+                    count--;
+                }
+            }
+            end.countDown();
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        // 线程数量，可以线程数量进行观察
+        int threadCount = 50;
+        end = new CountDownLatch(threadCount);
+        int count = 20;
+        AtomicInteger got = new AtomicInteger();
+        AtomicInteger notGot = new AtomicInteger();
+        for (int i = 0; i < threadCount; i++) {
+            Thread thread = new Thread(new ConnetionRunner(count, got, notGot), "ConnectionRunnerThread");
+            thread.start();
+        }
+        start.countDown();
+        end.await();        // 50个线程执行完之后，才开始输出日志
+        System.out.println("total invoke: " + (threadCount * count));
+        System.out.println("got connection:  " + got);
+        System.out.println("not got connection " + notGot);
+    }
+
+}
+
+```
+
+运行结果
+
+```
+total invoke: 1000
+got connection:  826
+not got connection 174
+```
+
