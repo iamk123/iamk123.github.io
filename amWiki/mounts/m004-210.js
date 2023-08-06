@@ -1,1 +1,1 @@
-if(typeof AWPageMounts=='undefined'){AWPageMounts={}};AWPageMounts['m004']=[{"name":"kafka.md","path":"004-kafka/kafka.md","content":"https://www.yuque.com/snailclimb/mbs9wn?密码：nqdq","timestamp":1691334742524}]
+if(typeof AWPageMounts=='undefined'){AWPageMounts={}};AWPageMounts['m004']=[{"name":"kafka.md","path":"004-kafka/kafka.md","content":"https://www.yuque.com/snailclimb/mbs9wn?密码：nqdq","timestamp":1691335064136}]
