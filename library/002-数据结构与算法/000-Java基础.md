@@ -13,10 +13,10 @@ List<String> list = map.getOrDefault(key, new ArrayList<String>())
 List<List<String>> list = new ArrayList<List<String>>(map.values()); 
 
 // 初始化赋值
-Map<String, String> map  = new HashMap<String, String>() {{
+Map<String, String> map  = new HashMap<String, String>() { {
   put("key1", "value1");
   put("key2", "value2");
-}};
+} };
 ```
 
 
