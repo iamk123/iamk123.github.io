@@ -75,6 +75,14 @@ GetObjectResponse stream = minioClient.getObject(
 
 
 
+#### 文件预览
+
+```
+openoffice
+```
+
+
+
 ### 问题
 
 #### 文件上传一半不上传了，怎么清理碎片分片？
