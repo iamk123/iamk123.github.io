@@ -2,17 +2,6 @@
 #### [首页](?file=home-首页)
 
 ##### JAVA
-- **Redis**
-    - **实践**
-        - [Caffeine+Redis多级缓存](?file=001-JAVA/001-Redis/001-实践/01-Caffeine+Redis多级缓存 "Caffeine+Redis多级缓存")
-        - [redis分布式限流器](?file=001-JAVA/001-Redis/001-实践/02-redis分布式限流器 "redis分布式限流器")
-    - [springboot引入redis](?file=001-JAVA/001-Redis/01-springboot引入redis "springboot引入redis")
-    - [redis实现分布式锁](?file=001-JAVA/001-Redis/02-redis实现分布式锁 "redis实现分布式锁")
-    - [布隆过滤器](?file=001-JAVA/001-Redis/03-布隆过滤器 "布隆过滤器")
-    - [springboot中使用布隆过滤器](?file=001-JAVA/001-Redis/04-springboot中使用布隆过滤器 "springboot中使用布隆过滤器")
-    - [redis实践](?file=001-JAVA/001-Redis/05-redis实践 "redis实践")
-    - [数据库和缓存双写一致性问题](?file=001-JAVA/001-Redis/06-数据库和缓存双写一致性问题 "数据库和缓存双写一致性问题")
-    - [缓存穿透、缓存击穿、缓存雪崩](?file=001-JAVA/001-Redis/07-缓存穿透、缓存击穿、缓存雪崩 "缓存穿透、缓存击穿、缓存雪崩")
 - [Java基础](?file=001-JAVA/01-Java基础 "Java基础")
 - **Java并发编程**
     - [并发编程相关](?file=001-JAVA/010-Java并发编程/00-并发编程相关 "并发编程相关")
@@ -25,7 +14,6 @@
     - [Executor框架](?file=001-JAVA/010-Java并发编程/07-Executor框架 "Executor框架")
 - **JUC**
     - [JUC](?file=001-JAVA/011-JUC/001-JUC "JUC")
-- [Redis](?file=001-JAVA/02-Redis "Redis")
 
 ##### 数据结构与算法
 - [Java基础](?file=002-数据结构与算法/000-Java基础 "Java基础")
@@ -153,6 +141,19 @@
 - [事务](?file=006-MySQL/03-事务 "事务")
 - [锁](?file=006-MySQL/04-锁 "锁")
 - [日志](?file=006-MySQL/05-日志 "日志")
+
+##### Redis
+- **实践**
+    - [springboot引入redis](?file=007-Redis/001-实践/01-springboot引入redis "springboot引入redis")
+    - [redis实现分布式锁](?file=007-Redis/001-实践/02-redis实现分布式锁 "redis实现分布式锁")
+    - [布隆过滤器](?file=007-Redis/001-实践/03-布隆过滤器 "布隆过滤器")
+    - [springboot中使用布隆过滤器](?file=007-Redis/001-实践/04-springboot中使用布隆过滤器 "springboot中使用布隆过滤器")
+    - [redis实践](?file=007-Redis/001-实践/05-redis实践 "redis实践")
+    - [数据库和缓存双写一致性问题](?file=007-Redis/001-实践/06-数据库和缓存双写一致性问题 "数据库和缓存双写一致性问题")
+    - [缓存穿透、缓存击穿、缓存雪崩](?file=007-Redis/001-实践/07-缓存穿透、缓存击穿、缓存雪崩 "缓存穿透、缓存击穿、缓存雪崩")
+    - [Caffeine+Redis多级缓存](?file=007-Redis/001-实践/08-Caffeine+Redis多级缓存 "Caffeine+Redis多级缓存")
+    - [redis分布式限流器](?file=007-Redis/001-实践/09-redis分布式限流器 "redis分布式限流器")
+- [Redis](?file=007-Redis/02-Redis "Redis")
 
 ##### GoLang
 - **字节青训营**
