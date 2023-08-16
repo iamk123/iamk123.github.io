@@ -10,12 +10,12 @@
 
 ### 线程的状态
 
-* New：新创建的线程，尚未执行；
-* Runnable：运行中的线程，正在执行 `run()`方法的Java代码；
-* Blocked：运行中的线程，因为某些操作被阻塞而挂起；
-* Waiting：运行中的线程，因为某些操作在等待中；
-* Timed Waiting：运行中的线程，因为执行 `sleep()`方法正在计时等待；
-* Terminated：线程已终止，因为 `run()`方法执行完毕。
+* 创建 New：新创建的线程，尚未执行；
+* 运行 Runnable：运行中的线程，正在执行 `run()`方法的Java代码；
+* 阻塞 Blocked：运行中的线程，因为某些操作被阻塞而挂起；
+* 等待 Waiting：运行中的线程，因为某些操作在等待中；
+* 超时等待 Timed Waiting：运行中的线程，因为执行 `sleep()`方法正在计时等待；
+* 终止 Terminated：线程已终止，因为 `run()`方法执行完毕。
 
 ![image-20230503132121863](https://cdn.jsdelivr.net/gh/iamk123/typora@main/uPic/2023/05/04/13042416831766641683176664243erV4pC-13212216830912821683091282100jSyioP-image-20230503132121863-20230504130424144.png)
 
@@ -111,6 +111,33 @@ public class Main {
 ```
 
 [参考](https://www.liaoxuefeng.com/wiki/1252599548343744/1306580710588449)
+
+### 实现Callable接口
+
+```java
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+    FutureTask<Integer> ft = new FutureTask<>(new MyCallable(););
+    Thread thread = new Thread(ft);
+    thread.start();
+    System.out.println(ft.get());
+}
+
+public class MyCallable implements Callable<Integer> {
+    public Integer call() {
+        return 123;
+    }
+}
+```
+
+### 三者对比
+
+```
+（1）继承Thread类：java不支持多继承，因此继承了 Thread 类就无法继承其它类，但是可以实现多个接口；
+（2）实现runnable接口
+（3）实现callable接口：可以获取返回结果
+```
+
+
 
 ## 3 中断线程
 

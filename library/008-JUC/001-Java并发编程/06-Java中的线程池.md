@@ -19,10 +19,10 @@ Java中的线程池是通过Executor框架来实现的，主要包括以下几�
 ### 优点
 
 ```
-1.重用线程，降低资源消耗：线程池可以重用已创建的线程，避免了频繁创建和销毁线程的开销。
-2.控制并发度：线程池可以限制并发线程的数量，通过控制核心线程数、最大线程数和任务队列的大小来控制线程池的并发度，避免系统资源被过度占用。
-3.提高响应速度：线程池可以通过复用线程，减少线程的创建和销毁时间，从而提高任务的响应速度。
-4.统一管理：线程池可以统一管理线程的生命周期、状态和执行结果，方便任务的提交、取消和获取执行结果。
+（1）减少线程创建和销毁开销：线程池可以重用已创建的线程，避免了频繁创建和销毁线程的开销。
+（2）控制并发度：线可以限制并发线程的数量，通过控制核心线程数、最大线程数和任务队列的大小来控制线程池的并发度，避免系统资源被过度占用。
+（3）提高响应速度：可以更快地获取到可用线程，从而更快地处理任务。
+（4）统一管理：线程池可以统一管理线程的生命周期、状态和执行结果，方便任务的提交、取消和获取执行结果。
 ```
 
 
@@ -52,24 +52,41 @@ Java中的线程池是通过Executor框架来实现的，主要包括以下几�
 ### 拒绝策略
 
 ```
-CallerRunsPolicy: 使用调用者所在线程直接运行任务。一般并发比较小，性能要求不高，不允许失败。但是由于调用者自己运行任务，如果任务提交速度过快，可能导致程序阻塞，性能上损失较大。
-AbortPolicy（默认）: 丢弃任务，并抛出拒绝执行RejectedExecutionException异常信息。必须处理好抛出的异常，否则会打断当前执行流程，影响后续的任务执行
-DiscardPolicy: 直接丢弃。
-DiscardOldestPolicy: 丢弃阻塞队列中等待时间最久的任务，并加入新任务
+（1）CallerRunsPolicy: 使用调用者所在线程直接运行任务。一般并发比较小，性能要求不高，不允许失败。但是由于调用者自己运行任务，如果任务提交速度过快，可能导致程序阻塞，性能上损失较大。
+（2）AbortPolicy（默认）: 抛出拒绝执行RejectedExecutionException异常来拒绝任务。必须处理好抛出的异常，否则会打断当前执行流程，影响后续的任务执行
+（3）DiscardPolicy: 直接丢弃。
+（4）DiscardOldestPolicy: 丢弃阻塞队列中等待时间最久的任务，并加入新任务
 ```
 
 ### 线程池的创建
+
+方式一：通过`ThreadPoolExecutor`构造函数来创建（推荐）
 
 ```java
 new ThreadPoolExecutor (
     corePoolSize, 		// 线程池的核心线程数
     maximumPoolSize,  // 能容纳的最大线程数
     keepAliveTime, 		// 空闲线程存活时间
-    unit, 						// 存活的时间单位
-    workQueue, 				// 存放提交但未执行任务的队列
+    unit, 						// 时间单位
+    workQueue, 				// 任务队列，用来储存等待执行任务的队列
     threadFactory, 		// 创建线程的工厂类
     handler						// 等待队列满后的拒绝策略
   );
+```
+
+方式二：通过 `Executor` 框架的工具类 `Executors` 来创建。
+
+```
+（1）SingleThreadExecutor：只有一个线程
+（2）FixedThreadPool：固定线程数量
+（3）CachedThreadPool：可根据实际情况调整线程数量
+（4）ScheduledThreadPool：该方法返回一个用来在给定的延迟后运行任务或者定期执行任务的线程池。
+```
+
+### 线程池常用的阻塞队列有哪些？
+
+```
+
 ```
 
 
@@ -126,16 +143,20 @@ shutdown只是将线程池的状态设置为SHUTDOWN状态，然后中断所有�
 通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以选择shutdownNow方法。
 ```
 
-### 注意事项
 
-```
-1 项目中创建多线程时，使用常见的三种线程池创建方式，单一、可变、定长都 有一定问题，原因是 FixedThreadPool 和 SingleThreadExecutor 底层都是用 LinkedBlockingQueue 实现的，这个队列最大长度为 Integer.MAX_VALUE， 容易导致 OOM。所以实际生产一般自己通过 ThreadPoolExecutor 的 7 个参 数，自定义线程池
-创建线程池推荐适用 ThreadPoolExecutor 及其 7 个参数手动创建
-```
 
-3. 为什么不允许适用不允许 Executors.的方式手动创建线程池
+### 为什么不允许 Executors.的方式手动创建线程池
 
 ![image-20230514202727417](https://cdn.jsdelivr.net/gh/iamk123/typora@main/uPic/2023/05/14/20272716840672471684067247591WgZgej-image-20230514202727417.png)
+
+```
+（1）通过ThreadPoolExecutor创建及其七个参数，可以让其他人能更加明确线程池的运行规则，规避资源耗尽的风险
+（2）通过Executors创建的线程池会存在一些隐患
+		- FixedThreadPool和SingleThreadPool:允许「请求队列长度」为Integer.MAX_VALUE, 可能会堆积大量请求，导致OOM
+		- CachedThreadPool和ScheduledThreadPool：允许「创建线程数量」为Integer.MAX_VALUE, 可能会创建大量的线程，从而导致OOM
+```
+
+
 
 ### 入门案例
 

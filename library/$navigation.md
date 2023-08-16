@@ -3,7 +3,8 @@
 
 ##### JAVA
 - [Java基础](?file=001-JAVA/01-Java基础 "Java基础")
-- [Springboot](?file=001-JAVA/02-Springboot "Springboot")
+- [集合](?file=001-JAVA/02-集合 "集合")
+- [Springboot](?file=001-JAVA/10-Springboot "Springboot")
 
 ##### 数据结构与算法
 - [Java基础](?file=002-数据结构与算法/000-Java基础 "Java基础")
@@ -175,6 +176,10 @@
     - [需求实践](?file=010-GoLang/01-字节青训营/04-需求实践 "需求实践")
     - [GORM](?file=010-GoLang/01-字节青训营/05-GORM "GORM")
     - [消息队列](?file=010-GoLang/01-字节青训营/06-消息队列 "消息队列")
+
+##### 操作系统
+- [内存管理](?file=011-操作系统/04-内存管理 "内存管理")
+- [进程管理](?file=011-操作系统/05-进程管理 "进程管理")
 
 ##### 学习amWiki
 - [amWiki轻文库简介](?file=100-学习amWiki/01-amWiki轻文库简介 "amWiki轻文库简介")
