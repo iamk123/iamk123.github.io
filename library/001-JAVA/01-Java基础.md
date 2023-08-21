@@ -55,6 +55,39 @@ int n = i 等价于 int n = i.intValue();
 （1）方式1显示创建一个Integer对象实例
 ```
 
+### int和Integer有什么区别
+
+```
+（1）int是基本数据类型；Integer是int的包装类
+（2）int默认值是0；Integer默认值是null，Integer使用需要判空
+（3）存储位置：
+		- int 值通常存储在栈上。
+		- Integer 对象存储在堆上，并且还有一个指向这个对象的引用存储在栈上。
+```
+
+### Integer的缓存机制
+
+```
+默认情况下，Integer 类缓存了从 -128 到 127 的所有整数对象。
+当我们调用 Integer.valueOf() 方法或因为自动装箱而创建 Integer 对象时，如果值在此范围内，Java 会直接从缓存中返回已存在的对象，而不是创建一个新的对象。
+```
+
+### 缓存机制的作用
+
+```java
+（1）性能优化：避免频繁的创建和销毁这些对象
+（2）节省内存
+
+Integer a = 10;
+Integer b = 10;
+
+Integer c = 129；
+Integer d = 129;
+
+System.out.println(a == b)		// true
+System.out.println(c == d)  	// false
+```
+
 
 
 ## 变量
@@ -209,9 +242,9 @@ innerObject.staticVariable;
 定义在方法中的变量是局部变量，如果定义在方法中，那么只有方法被初始化，方法执行后就会销毁。
 ```
 
-### 初始化顺序 [x]
+### 类的实例化初始化顺序 [x]
 
-```
+```java
 静态变量和静态语句块优先于实例变量和普通语句块，静态变量和静态语句块的初始化顺序取决于它们在代码中的顺序。
 
 父类（静态变量、静态语句块）
@@ -220,6 +253,40 @@ innerObject.staticVariable;
 父类（构造函数）
 子类（实例变量、普通语句块）
 子类（构造函数）
+
+class Parent {
+    static {
+        System.out.println("1. Parent static block");
+    }
+    
+    {
+        System.out.println("3. Parent instance block");
+    }
+    
+    public Parent() {
+        System.out.println("4. Parent constructor");
+    }
+}
+
+class Child extends Parent {
+    static {
+        System.out.println("2. Child static block");
+    }
+    
+    {
+        System.out.println("5. Child instance block");
+    }
+    
+    public Child() {
+        System.out.println("6. Child constructor");
+    }
+}
+
+public class TestInitialization {
+    public static void main(String[] args) {
+        new Child();
+    }
+}
 ```
 
 
@@ -327,6 +394,16 @@ true
 （2）运行时多态：主要通过方法的重写和继承实现的。当子类继承父类并重写父类的方法时，父类引用指向子类对象，并调用子类对象的方法，这种方法调用解析是在运行时进行的。
 ```
 
+### Java 支持多继承么,为什么？
+
+```
+不支持多继承，原因:
+（1）安全性的考虑，如果子类继承的多个父类里面有相同的方法或者属性，子类将不知道具体要继承哪个。 
+（2）Java 提供了接口和内部类以达到实现多继承功能，弥补单继承的缺陷。
+```
+
+
+
 ### 抽象类和接口有什么区别
 
 ```
@@ -346,6 +423,21 @@ true
 （1）深拷贝：深拷贝会完全复制整个对象，包括这个对象所包含的内部对象。
 （2）浅拷贝：浅拷贝会在堆上创建一个新的对象（区别于引用拷贝的一点），不过，如果原对象内部的属性是引用类型的话，浅拷贝会直接复制内部对象的引用地址，也就是说拷贝对象和原对象共用同一个内部对象。
 （3）引用拷贝：引用拷贝就是两个不同的引用指向同一个对象。
+```
+
+### Java 创建对象有几种方式
+
+```java
+（1）使用new关键字：
+  	ClassName objectName = new ClassName();
+
+（2）反射中使用Class类的newInstance()方法：
+		ClassName objectName = (ClassName) Class.forName("ClassName").newInstance();
+
+（3）使用clone()方法：如果一个类实现了Cloneable接口，则可以使用clone()方法创建该对象的一个复制品。
+  	ClassName object1 = new ClassName();
+		ClassName object2 = (ClassName) object1.clone();
+
 ```
 
 
@@ -391,6 +483,40 @@ equals：
 
 
 
+##  泛型
+
+[参考](https://juejin.cn/post/6844904050673057799#heading-5)
+
+### 是什么
+
+```
+就是一种参数化类型，在编写一个类、接口或方式来操作特定类型的数据时，不需要实现知道这些数据的确切类型
+```
+
+### 好处
+
+```
+（1）类型安全：泛型提供编译时类型检查，编译器会在编译期间检查代码，确保没有不合法或不安全的类型转换。如果存在不安全的转换或操作，编译器会报错。
+（2）代码重用：对于相同逻辑，只是类型不同的代码，可以进行重用
+（3）类型自动转换：相较于Object，不用类型转换，代码更简洁，可读性增强。
+```
+
+### 什么是类型擦除
+
+```
+使用泛型时，编译器会确保我们在代码中正确使用泛型，在代码编译成字节码后，泛型相关的信息就会被移除，这个过程就叫类型擦除
+```
+
+### 为什么需要类型擦除
+
+```
+（1）向后兼容：泛型出来前，已经有大量的java代码，为了能够和老版本的代码兼容
+（2）简化虚拟机的设计：类型擦除确保了在运行时，虚拟机只需要处理原始类型，并不需要为泛型带来的类型多样性增加复杂性。这样，JVM不需要进行大量的修改就能支持泛型。
+（3）泛型实例共享：由于类型擦除，例如List<String>和List<Integer>在运行时都被转化为了原始的List，这意味着不同的泛型类型在运行时实际上共享同一个Class实例。这有助于减少运行时的内存开销。
+```
+
+
+
 ## String
 
 ### String，Stringbuffer，StringBuilder 的区别
@@ -418,7 +544,7 @@ equals：
 ```
 private final char value[];
 (1) 保存字符串的数组被 final 修饰且为私有的，并且String 类没有提供/暴露修改这个字符串的方法。
-(2)String 类被 final 修饰导致其不能被继承，进而避免了子类破坏 String 不可变。
+(2) String 类被 final 修饰导致其不能被继承，进而避免了子类破坏 String 不可变。
 ```
 
 ### 字符串常量池的作用了解吗？
@@ -443,6 +569,27 @@ System.out.println(aa==bb);// true
 (1) 如果字符串常量池中不存在字符串对象“abc”的引用，那么它将首先在字符串常量池中创建，然后在堆空间中创建，因此将创建总共 2 个字符串对象。
 (2) 如果字符串常量池中已存在字符串对象“abc”的引用，则只会在堆中创建 1 个字符串对象“abc”。
 ```
+
+### String s 与 new String 与有什么区别
+
+```
+String str ="whx"
+先在常量池中查找有没有"whx" 这个对象,如果有，就让 str 指向那个"whx".
+如果没有，在常量池中新建一个“whx”对象，并让 str 指向在常量池中新建的对 象"whx"
+
+String newStr =new String ("whx");
+是在堆中建立的对象"whx" ,在栈中创建堆中"whx" 对象的内存地址。
+```
+
+### String s="a"+"b"+"c"+"d";创建了几个对象？
+
+```
+1个
+
+Java 编译器对字符串常量直接相加的表达式进行优化，不等到运行期去进行加法运算，在编译时就去掉了加号，直接将其编译成一个这些常量相连的结果。 所以 "a"+"b"+"c"+"d" 相当于直接定义一个 "abcd" 的字符串。
+```
+
+
 
 
 
@@ -496,14 +643,70 @@ finalize：
 
 
 
-## 反射
+## 反射 TODO
 
 ### 是什么？
 
 ```
 反射是一种机制，指的是在程序运行时动态加载类并获取类的详细信息，从而操作类或对象的属性和方法。
-本质是JVM得到class对象之后，再通过class对象进行反编译，从而获取对象的各种信息。
 
 https://blog.csdn.net/a745233700/article/details/82893076
+```
+
+```
+oracle官方解释：指在运行状态中，对于任意一个类都能够知道这个类所有的属性和方法； 并且对于任意一个对象，都能够调用它的任意一个方法；这种动态获取信息以及动态调用对象方法的功能成为Java语言的反射机制。
+```
+
+### 实现原理
+
+```
+本质是JVM得到class对象之后，再通过class对象进行反编译，从而获取对象的各种信息。
+```
+
+### 获取 Class 对象的方法
+
+```java
+(1) 知道具体类
+Class alunbarClass = TargetObject.class;
+
+(2) 通过 Class.forName()传入类的全路径获取：
+Class alunbarClass1 = Class.forName("cn.javaguide.TargetObject");
+
+(3) 通过对象实例instance.getClass()获取：
+TargetObject o = new TargetObject();
+Class alunbarClass2 = o.getClass();
+
+（4）通过类加载器xxxClassLoader.loadClass()传入类路径获取:
+ClassLoader.getSystemClassLoader().loadClass("cn.javaguide.TargetObject");
+```
+
+[参考](https://javaguide.cn/java/basis/reflection.html#反射的一些基本操作)
+
+## Java 中 IO 流
+
+```
+分为字节流和字符流
+（1）字节流：InputStream、OutputStream
+（2）字符流：Reader、Writer
+```
+
+## JVM & JDK & JRE有什么区别
+
+<img src="https://cdn.jsdelivr.net/gh/iamk123/typora@main/uPic/2023/08/21/14003216925976321692597632294gp7a91-image-20230821140032155.png" alt="image-20230821140032155" style="zoom: 67%;" />
+
+```
+（1）JDK：Java Development Kit 的简称，Java 开发工具包，包含JRE和开发工具，能够创建和编译程序
+（2）JRE：Java Runtime Environment 的简称，Java 运行环境，为 Java 的运行提供了所需环境。
+包含JVM和一些核心类库
+（3）JVM：它为Java字节码提供了一个运行环境。JVM的核心职责是加载、验证、编译以及执行Java字节码
+```
+
+[参考](https://www.javalearn.cn/#/doc/Java%E5%9F%BA%E7%A1%80/%E9%9D%A2%E8%AF%95%E9%A2%98?id=jvm%e3%80%81jre%e5%92%8cjdk%e7%9a%84%e5%85%b3%e7%b3%bb%e6%98%af%e4%bb%80%e4%b9%88%ef%bc%9f)
+
+## 什么是值传递和引用传递？
+
+```
+（1）值传递是对基本型变量而言的,传递的是该变量的一个副本，改变副本不影响原变量.
+（2）引用传递一般是对于对象型变量而言的,传递的是该对象地址的一个副本, 并不是原对象本身 。 所以对引用对象进行操作会同时改变原对象.
 ```
 
