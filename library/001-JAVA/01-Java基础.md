@@ -27,7 +27,7 @@
 （4）集合和泛型都只能用包装类，不能用基本数据类型
 ```
 
-### 自动装箱与拆箱了解吗？原理是什么？[x]
+### 自动装箱与拆箱了解吗？原理是什么？[xx]
 
 ```
 （1）装箱：就是把基本类型转为包装类型。调用了包装类的valueOf()方法
@@ -37,22 +37,17 @@ Integer i = 10 等价于 Integer i = Integer.valueOf(10)
 int n = i 等价于 int n = i.intValue();
 ```
 
-### 为什么要自动装箱和拆箱
+### 为什么要自动装箱和拆箱 [x]
 
 ```
 代码简化，更加直观：ArrayList<Integer>只能添加包装类，如果没有自动装箱，就需要我们手动新建Integer对象，然后添加
 ```
 
-### 装箱 拆箱 缓存 TODO
-
-```
-
-```
-
 ### 谈谈Integer i = new Integer(xxx)和Integer i =xxx;这两种方式的区别
 
 ```
-（1）方式1显示创建一个Integer对象实例
+（1） new Integer(xxx) 每次创建一个Integer对象实例；
+（2）Integer i = xxx 可能会使用缓存的 Integer 对象，特别是当值在 -128 到 127 之间时。
 ```
 
 ### int和Integer有什么区别
@@ -327,12 +322,12 @@ javaguide
 面向对象：会先抽象出对象，然后用对象执行方法的方式解决问题。为了能够更好的模块化、增加代码的重用性
 ```
 
-### 创建一个对象用什么运算符?对象实体与对象引用有何不同?
+### 创建一个对象用什么运算符?对象实体与对象引用有何不同? [x]
 
 ```
 new 运算符，new 创建对象实例（对象实例在 内存中），
 对象引用指向对象实例（对象引用存放在栈内存中）。
-- 一个对象引用可以指向 0 个或 1 个对象（一根绳子可以不系气球，也可以系一个气球）；
+- 一个对象实例可以指向 0 个或 1 个对象（一根绳子可以不系气球，也可以系一个气球）；
 - 一个对象可以有 n 个引用指向它（可以用 n 条绳子系住一个气球）。
 ```
 
@@ -425,7 +420,7 @@ true
 （3）引用拷贝：引用拷贝就是两个不同的引用指向同一个对象。
 ```
 
-### Java 创建对象有几种方式
+### Java 创建对象有几种方式 [x]
 
 ```java
 （1）使用new关键字：
@@ -547,7 +542,7 @@ private final char value[];
 (2) String 类被 final 修饰导致其不能被继承，进而避免了子类破坏 String 不可变。
 ```
 
-### 字符串常量池的作用了解吗？
+### 字符串常量池的作用了解吗？[x]
 
 ```java
 字符串常量池 是 JVM 为了提升性能和减少内存消耗针对字符串（String 类）专门开辟的一块区域，主要目的是为了避免字符串的重复创建。
@@ -570,7 +565,7 @@ System.out.println(aa==bb);// true
 (2) 如果字符串常量池中已存在字符串对象“abc”的引用，则只会在堆中创建 1 个字符串对象“abc”。
 ```
 
-### String s 与 new String 与有什么区别
+### String s 与 new String 与有什么区别 [x]
 
 ```
 String str ="whx"
@@ -629,7 +624,7 @@ Unchecked Exception：Java 代码在编译过程中 ，我们即使不处理不�
 （3）关闭 CPU。
 ```
 
-### final, finally, finalize 的区别
+### final, finally, finalize 的区别 [x]
 
 ```
 final：
@@ -643,9 +638,9 @@ finalize：
 
 
 
-## 反射 TODO
+## 反射
 
-### 是什么？
+### 是什么？[x]
 
 ```
 反射是一种机制，指的是在程序运行时动态加载类并获取类的详细信息，从而操作类或对象的属性和方法。
@@ -663,7 +658,7 @@ oracle官方解释：指在运行状态中，对于任意一个类都能够知�
 本质是JVM得到class对象之后，再通过class对象进行反编译，从而获取对象的各种信息。
 ```
 
-### 获取 Class 对象的方法
+### 获取 Class 对象的方法 [x]
 
 ```java
 (1) 知道具体类
@@ -682,7 +677,7 @@ ClassLoader.getSystemClassLoader().loadClass("cn.javaguide.TargetObject");
 
 [参考](https://javaguide.cn/java/basis/reflection.html#反射的一些基本操作)
 
-## Java 中 IO 流
+## Java 中 IO 流 [x]
 
 ```
 分为字节流和字符流
@@ -690,7 +685,7 @@ ClassLoader.getSystemClassLoader().loadClass("cn.javaguide.TargetObject");
 （2）字符流：Reader、Writer
 ```
 
-## JVM & JDK & JRE有什么区别
+## JVM & JDK & JRE有什么区别 [x]
 
 <img src="https://cdn.jsdelivr.net/gh/iamk123/typora@main/uPic/2023/08/21/14003216925976321692597632294gp7a91-image-20230821140032155.png" alt="image-20230821140032155" style="zoom: 67%;" />
 
@@ -710,3 +705,41 @@ ClassLoader.getSystemClassLoader().loadClass("cn.javaguide.TargetObject");
 （2）引用传递一般是对于对象型变量而言的,传递的是该对象地址的一个副本, 并不是原对象本身 。 所以对引用对象进行操作会同时改变原对象.
 ```
 
+## java是值传递还是引用传递 [x]
+
+```java
+（1）传递基本数据类型
+当我们向方法传递基本数据类型的值时，例如 int、float、char 等，我们实际上是传递该值的拷贝。因此，即使方法修改了这个拷贝的值，原始变量的值也不会被改变。
+
+（2）传递对象引用：
+当我们向方法传递对象时，我们实际上是传递对象引用的拷贝，而不是对象本身的拷贝。因此，方法可以通过这个引用修改对象的状态，但不能修改这个引用本身，使其指向另一个对象。
+
+// --- 例子1： str 也没有被改变 ---
+String str = "ABC";
+foo(str);
+
+// 没有提供改变自身方法的引用类型
+static void foo(String text) {		
+		text = "windows";
+}
+
+// --- 例子2： sb 被改变了，变成了"iphone4"。---
+StringBuilder sb1 = new StringBuilder("iphone");
+foo1(sb1); 
+
+// 提供了改变自身方法的引用类型
+static void foo1(StringBuilder builder) {		
+	builder.append("4");
+}
+
+// --- 例子3： sb 没有被改变，还是 "iphone" ---
+StringBuilder sb2 = new StringBuilder("iphone");
+foo2(sb2); 
+
+// 提供了改变自身方法的引用类型，但是不使用，而是使用赋值运算符。
+static void foo2(StringBuilder builder) {		
+	builder = new StringBuilder("ipad");
+}
+```
+
+[参考](https://developer.aliyun.com/article/378196)
