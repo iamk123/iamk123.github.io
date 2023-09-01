@@ -638,7 +638,7 @@ finalize：
 
 
 
-## 反射
+## 反射 [*]
 
 ### 是什么？[x]
 
@@ -676,6 +676,18 @@ ClassLoader.getSystemClassLoader().loadClass("cn.javaguide.TargetObject");
 ```
 
 [参考](https://javaguide.cn/java/basis/reflection.html#反射的一些基本操作)
+
+### 应用场景 [*]
+
+```
+（1）框架设计：比如Spring中@Component注解就声明了一个类为 Spring Bean；@Value注解就读取到配置文件中的值
+（2）动态代理：AOP允许在运行时动态地创建代理类
+（3）ORM（对象关系映射）：ORM工具，如Hibernate，使用反射将数据库表与Java类相映射，从而可以动态地创建对象和设置属性，而不需要为每个数据库表手动写代码。
+（4）自定义注解处理：可以使用反射来处理自定义注解，执行特定的逻辑。
+（5）JSON和对象的转换：像Jackson和Gson这样的库允许你在JSON字符串和Java对象之间转换，并使用反射来动态地设置或获取对象的属性。
+```
+
+
 
 ## Java 中 IO 流 [x]
 
