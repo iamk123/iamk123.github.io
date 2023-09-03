@@ -134,7 +134,10 @@ public class MyCallable implements Callable<Integer> {
 ```
 （1）继承Thread类：java不支持多继承，因此继承了 Thread 类就无法继承其它类，但是可以实现多个接口；
 （2）实现runnable接口
-（3）实现callable接口：可以获取返回结果
+		- 使用run()方法
+（3）实现callable接口：
+		- 可以获取返回结果
+		- 使用call()方法
 ```
 
 
