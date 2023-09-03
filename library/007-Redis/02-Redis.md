@@ -835,6 +835,14 @@ AOF 文件的前半部分是 RDB 格式的全量数据，后半部分是 AOF 格
 （2）兼容性差，如果开启混合持久化，那么此混合持久化 AOF 文件，就不能用在 Redis 4.0 之前版本了
 ```
 
+### 大key会有什么问题？ TODO
+
+```
+https://xiaolincoding.com/redis/storage/bigkey_aof_rdb.html#%E5%A4%A7-key-%E5%AF%B9-aof-%E6%97%A5%E5%BF%97%E7%9A%84%E5%BD%B1%E5%93%8D
+```
+
+
+
 
 
 ## 线程模型 TODO
@@ -1205,7 +1213,7 @@ https://developer.baidu.com/article/detail.html?id=294748
 https://www.yuque.com/snailclimb/mf2z3k/ks9olb19hc9wse5k#4193d6d4
 ```
 
-#### Redis主从节点时长连接还是短连接？
+#### Redis主从节点是长连接还是短连接？
 
 ```
 长连接
