@@ -346,7 +346,6 @@
     - [Java中的原子操作类](?file=008-JUC/001-Java并发编程/04-Java中的原子操作类 "Java中的原子操作类")
     - [Java中的并发工具类](?file=008-JUC/001-Java并发编程/05-Java中的并发工具类 "Java中的并发工具类")
     - [Java中的线程池](?file=008-JUC/001-Java并发编程/06-Java中的线程池 "Java中的线程池")
-    - [Executor框架](?file=008-JUC/001-Java并发编程/07-Executor框架 "Executor框架")
     - [场景题](?file=008-JUC/001-Java并发编程/08-场景题 "场景题")
 
 ##### 设计模式
