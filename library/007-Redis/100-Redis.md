@@ -40,9 +40,10 @@ chatgpt
 ### Redis 为什么这么快？ TODO
 
 ```
-（1）内存存储：数据存储在内存中，读写速度快
+（1）内存存储：数据存储在内存中，读写速度快，不需要磁盘IO
 （2）IO多路复用： Redis 基于 Reactor 模式设计开发了一套高效的事件处理模型，主要是单线程事件循环和 IO 多路复用
-（3）Redis 内置了多种优化过后的数据结构实现，性能非常高。
+（3）单线程：对命令的处理过程是单线程的，避免了线程上下文切换带来的开销。
+（4）Redis 内置了多种优化过后的数据结构实现，性能非常高。
 
 https://javaguide.cn/database/redis/redis-questions-01.html#redis-为什么这么快
 Redis 为什么这么快，你知道 I/O 多路复用吗？：https://learnku.com/articles/73927
@@ -905,7 +906,6 @@ Redis 操作数据的指令是单线程，所以在数据复制移动的时候�
 
 
 ## RedLock TODO
-
 
 
 

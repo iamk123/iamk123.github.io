@@ -21,7 +21,7 @@
 3.在使用Lock接口时，需要在finally代码块中释放锁，以确保锁一定会被释放，避免死锁的发生。
 ```
 
-###
+
 
 ## Synchronized
 
@@ -40,7 +40,7 @@ public class Counter {
         public synchronized void increment() {
             count++;
         }
-    }
+}
 ```
 
 ### 实现原理
@@ -99,7 +99,7 @@ Lock接口提供了以下主要方法：
 需要注意的是，在使用Lock接口时，需要在finally代码块中释放锁，以确保锁一定会被释放，避免死锁的发生。
 ```
 
-### Lock的实现原理是什么？
+### Lock的实现原理是什么？ TODO
 
 ```
 Lock的实现是基于Java的AbstractQueuedSynchronizer（AQS）框架的。
@@ -150,10 +150,6 @@ Lock和Synchronized都是Java中用于实现线程同步的机制，它们的目
 （4）公平性：Synchronized不保证线程获取锁的公平性，而Lock可以通过构造函数指定公平或非公平锁。
 （5）场景：如果在简单的并发场景下，推荐使用Synchronized；而在需要更高级的锁控制时，可以考虑使用Lock。
 ```
-
-
-
-
 
 
 
