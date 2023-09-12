@@ -27,41 +27,26 @@ https://mp.weixin.qq.com/s/ha4Ojv9tDNaeMg4mAVwUTA
 
 ## 分布式锁实现
 
-### key-value的设计
+### 加锁
+
+原子性、忘解锁
 
 ```
-key：
-需要考虑「唯一性」、「易读性」，将不同系统，不同业务区分开。
-固定前缀：业务相关字符串
+通过lua脚本和「setnx + expire」命令尝试在指定时间内获取锁，并设置一个过期时间。
+（或者SET key value EX 10 NX）
 
-value：
-设置为一个唯一标识符，避免「误解锁」问题
-```
-
-### 获取锁
-
-```
-通过lua脚本和setnx命令来尝试在指定时间内尝试获取锁
-```
-
-为什么用lua脚本？
-
-```
-setnx不能设置过期时间，需要SETNX key value 和 EXPIRE key 10两个命令，lua脚本保证了原子性。
-或者可以通过SET key value EX 10 NX来实现
-```
-
-为什么要在规定时间内尝试获取锁？
-
-```
-（1）优化性能：如果高并发下，避免大量请求获取锁失败而直接返回，减少错误处理和网络开销。
-（2）避免资源剩余问题：比如抢票功能，如果只有一个请求加锁成功，其他请求都返回，就会导致资源剩余的情况
+（1）lua脚本：为了保证两个操作的原子性，防止setnt后进程crash或者要重启，那么这个锁就会永远存在。
+（2）指定时间内获取锁：
+	- 避免大量请求获取锁失败而直接返回，减少错误处理和网络开销。
+	- 资源剩余问题：比如抢票功能，如果只有一个请求加锁成功，其他请求都返回，就会导致资源剩余的情况
+（3）过期时间：为了防止忘记解锁导致这个锁一直无法释放，阻塞别的线程
 ```
 
 ### 锁续期
 
 ```
-如果业务需要执行很长时间，在这个期间锁到期自动释放，此时别的进程获取该锁，就会出现问题
+（1）如果业务需要执行很长时间，在这个期间锁到期自动释放，此时别的进程获取该锁，就会出现问题
+（2）默认设置30s，超过一半时间续期
 ```
 
 如何解决
@@ -71,14 +56,22 @@ setnx不能设置过期时间，需要SETNX key value 和 EXPIRE key 10两个命
 续期时通过lua脚本，查询锁是否存在，存在则延长时间
 ```
 
-### 释放锁
+### 解锁
+
+原子性、误解锁
 
 ```
-需要传入key和value，需要去比对key对应的value和传入的value是否一致，如果一直才允许释放锁。
-这个过程通过lua脚本实现，保证原子性。
+（1）误解锁：设置锁的时候，value值设置一个唯一标识符，解锁需要传入key和value，需要去比对key对应的value和传入的value是否一致，如果一直才允许释放锁。
+（2）原子性：这个过程通过lua脚本实现，保证原子性。
+
+唯一标识符： String requestId = productId + Thread.currentThread().getId();
 ```
 
+#### 锁可重入
 
+```
+Redisson
+```
 
 
 
@@ -598,3 +591,5 @@ public class IndexController {
 -   [田螺：大厂防止超卖的7种实现，很受用！](https://mp.weixin.qq.com/s/syu4CWEvq5YQR5JRrdMn0Q)
 
 -   [田螺：七种方案！探讨Redis分布式锁的正确使用姿势](https://mp.weixin.qq.com/s?__biz=Mzg3NzU5NTIwNg==&mid=2247488142&idx=1&sn=79a304efae7a814b6f71bbbc53810c0c&chksm=cf21cda7f85644b11ff80323defb90193bc1780b45c1c6081f00da85d665fd9eb32cc934b5cf&token=162724582&lang=zh_CN&scene=21#wechat_redirect)
+
+-   [田螺：Redis分布式锁的10个坑](https://mp.weixin.qq.com/s?__biz=Mzg3NzU5NTIwNg==&amp;mid=2247503100&amp;idx=1&amp;sn=8612773ac3591f8ef7b5fa49b2394d91&amp;chksm=cf2213d5f8559ac38cf154b73c43c500667a9f383d08c5ec7c1c725170aa2d20e4d15b50524b&token=1611942352&lang=zh_CN#wechat_redirect)
