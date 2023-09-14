@@ -369,7 +369,8 @@ true
 封装
 
 ```
-指把对象的属性封装在对象内部，不允许外部对象直接访问对象内部信息。可以提供一些被外界访问的方法来操作属性
+（1）定义：指把对象的属性封装在对象内部，不允许外部对象直接访问对象内部信息。可以提供一些被外界访问的方法来操作属性
+（2）好处：这样可以防止对象内部状态的不合理修改。提高代码的安全性和可维护性。
 ```
 
 继承
@@ -388,6 +389,31 @@ true
 （1）编译时多态：主要是通过方法的重载实现的，编译时，java编译器会根据调用方法的参数类型、数量来决定使用哪个方法
 （2）运行时多态：主要通过方法的重写和继承实现的。当子类继承父类并重写父类的方法时，父类引用指向子类对象，并调用子类对象的方法，这种方法调用解析是在运行时进行的。
 ```
+
+## 五大原则（SOLID原则）
+
+```
+（1）单一职责 Single
+	- 一个类只负责一项功能
+	- 提高类的可读性和可维护性
+	
+（2）开闭原则 Open
+	- 软件实体应该是可扩展的，而不可修改的。
+	- 提高拓展性和稳定性
+	
+（3）里氏替换原则
+	- 子类型必须能够替换它的基类型，而系统的行为还是保持不变。
+	- 类A是类B的父类，那么在进行调用的时候，类A可以引用类B，但是反过来不行。
+	
+（4）接口隔离原则 Interface
+	- 使用多个小的专门的接口，而不要使用一个大的总接口。
+	
+（5）依赖倒置原则 Dependency
+	- 高层模块不应该依赖低层模块，两者都应该依赖其抽象；抽象不应该依赖于细节，细节应该依赖于抽象。
+	- 降低了类之间的耦合性，提高了系统的可维护性和可扩展性。
+```
+
+
 
 ### Java 支持多继承么,为什么？
 
@@ -438,6 +464,58 @@ true
 
 
 ## Object
+
+### 有哪些方法
+
+```java
+/**
+ * native 方法，用于返回当前运行时对象的 Class 对象，使用了 final 关键字修饰，故不允许子类重写。
+ */
+public final native Class<?> getClass()
+/**
+ * native 方法，用于返回对象的哈希码，主要使用在哈希表中，比如 JDK 中的HashMap。
+ */
+public native int hashCode()
+/**
+ * 用于比较 2 个对象的内存地址是否相等，String 类对该方法进行了重写以用于比较字符串的值是否相等。
+ */
+public boolean equals(Object obj)
+/**
+ * native 方法，用于创建并返回当前对象的一份拷贝。
+ */
+protected native Object clone() throws CloneNotSupportedException
+/**
+ * 返回类的名字实例的哈希码的 16 进制的字符串。建议 Object 所有的子类都重写这个方法。
+ */
+public String toString()
+/**
+ * native 方法，并且不能重写。唤醒一个在此对象监视器上等待的线程(监视器相当于就是锁的概念)。如果有多个线程在等待只会任意唤醒一个。
+ */
+public final native void notify()
+/**
+ * native 方法，并且不能重写。跟 notify 一样，唯一的区别就是会唤醒在此对象监视器上等待的所有线程，而不是一个线程。
+ */
+public final native void notifyAll()
+/**
+ * native方法，并且不能重写。暂停线程的执行。注意：sleep 方法没有释放锁，而 wait 方法释放了锁 ，timeout 是等待时间。
+ */
+public final native void wait(long timeout) throws InterruptedException
+/**
+ * 多了 nanos 参数，这个参数表示额外时间（以纳秒为单位，范围是 0-999999）。 所以超时的时间还需要加上 nanos 纳秒。。
+ */
+public final void wait(long timeout, int nanos) throws InterruptedException
+/**
+ * 跟之前的2个wait方法一样，只不过该方法一直等待，没有超时时间这个概念
+ */
+public final void wait() throws InterruptedException
+/**
+ * 实例被垃圾回收器回收的时候触发的操作
+ */
+protected void finalize() throws Throwable { }
+
+```
+
+
 
 ### equals 与==的区别
 
@@ -755,3 +833,15 @@ static void foo2(StringBuilder builder) {
 ```
 
 [参考](https://developer.aliyun.com/article/378196)
+
+
+
+## java8新特性
+
+```
+（1）lambda表达式（函数式接口）：允许我们将函数作为参数传递给另一个函数或返回一个函数。它能帮助简化代码并提高可读性。
+（2）Streams API：Stream API 用于处理集合对象，可以极大地简化集合对象的操作，支持顺序和并行处理。
+（3）Default 方法：在接口中可以定义具有实现的方法，而不仅仅是抽象方法，这有助于向接口添加新方法，而不破坏现有的实现。
+（4）新的日期和时间API：
+```
+
