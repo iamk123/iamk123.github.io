@@ -63,7 +63,7 @@ Java中的线程池是通过Executor框架来实现的，主要包括以下几�
 方式一：通过`ThreadPoolExecutor`构造函数来创建（推荐）
 
 ```java
-new ThreadPoolExecutor (
+ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor (
     corePoolSize, 		// 线程池的核心线程数
     maximumPoolSize,  // 能容纳的最大线程数
     keepAliveTime, 		// 空闲线程存活时间
@@ -76,11 +76,39 @@ new ThreadPoolExecutor (
 
 方式二：通过 `Executor` 框架的工具类 `Executors` 来创建。
 
-```
+```java
 （1）SingleThreadExecutor：只有一个线程
 （2）FixedThreadPool：固定线程数量
 （3）CachedThreadPool：可根据实际情况调整线程数量
 （4）ScheduledThreadPool：该方法返回一个用来在给定的延迟后运行任务或者定期执行任务的线程池。
+
+例子：ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);
+```
+
+
+
+### 线程池常用的阻塞队列有哪些？
+
+```
+有界阻塞队列
+（1）ArrayBlockingQueue: 基于数组结构的有界阻塞队列，按 FIFO（先进先出）原则对元素进行排序
+（2）LinkedBlockingQueue: 基于链表结构的可选定界（也可以是无界）阻塞队列，按 FIFO 排序元素。
+	- 默认
+
+无界阻塞队列
+（1）PriorityBlockingQueue: 一个无界阻塞队列，它使用优先级堆来实现，线程池中的任务可以按优先级进行执行。
+（2）DelayedQueue: 一个无界阻塞队列，只允许延迟元素从队列中取出，用于实现延迟任务。
+
+其他
+（1）LinkedBlockingDeque: 一个基于链表结构的双向阻塞队列，可以从两端插入或者移除元素。
+（2）LinkedTransferQueue: 一种链表结构的无界传输队列，它是 TransferQueue 的一个实现，提供了更好的性能。
+```
+
+### 线程创建工程有哪些？
+
+```
+（1）默认的线程工厂：ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();
+（2）可以自定义线程工厂来自定义创建线程的过程。例如，你可以设置线程的名称、守护状态、优先级等。
 ```
 
 
@@ -91,7 +119,7 @@ new ThreadPoolExecutor (
 （1）CPU密集型任务：
 	- 主要消耗CPU资源，而不涉及IO操作，因此线程数的设置应该尽量与CPU核心数保持一致。
 	- 一般推荐将核心线程数设置为CPU核心数 + 1，
-	- 可以可以充分利用CPU的计算能力，并且提供一个额外的线程用于防止CPU饥饿
+	- 提供一个额外的线程是为了在某个线程因I/O操作或其他原因被阻塞时，这个额外的线程可以被用来执行其他任务，从而防止CPU资源的闲置，避免CPU饥饿。
 	
 （2）IO密集型任务：
 	- 这类任务在进行IO操作时会占用比较多时间。因此可以适当增加线程池的核心线程数。
@@ -101,12 +129,6 @@ new ThreadPoolExecutor (
 
 
 
-### 线程池常用的阻塞队列有哪些？
-
-```
-
-```
-
 
 
 ### 向线程池提交任务
@@ -115,29 +137,40 @@ new ThreadPoolExecutor (
 
 ```java
 // 用于提交不需要返回值的任务，无法判断任务是否被线程池执行成功
-threadsPool.execute(new Runnable() {
-  public void run() {
-    
-  }
-})
+ExecutorService executorService = Executors.newFixedThreadPool(2);
+executorService.execute(new Runnable() {
+    @Override
+    public void run() {
+        // 你的任务代码
+    }
+});
+
+（1）使用方式: 你可以使用 execute() 方法提交一个 Runnable 对象来执行。
+（2）返回值: 此方法没有返回值。
+（3）异常处理: 如果在任务执行过程中出现异常，execute() 方法不会返回任何提示。异常将被线程池的 UncaughtExceptionHandler 捕获。
 ```
 
 #### 方式二：submit()
 
 ```java
 // 用于提交需要返回值的任务。
-// 线程池会返回一个future类型的对象，通过这个对象可以判断任务是否执行成功，并且可以通过future的get()方法来获取返回值，get()方法会阻塞当前线程知道任务完成; 通过get(long timeout, TimeUnit unit)方法则会阻塞当前线程一段时间后立即返回，这时候任务可能没有执行完。
-Future(Object) future = executor.submit(harReturnValuetask);
+ExecutorService executorService = Executors.newFixedThreadPool(2);
+Future<?> futureResult = executorService.submit(new Callable<String>() {
+    @Override
+    public String call() throws Exception {
+        return "Task Result";
+    }
+});
+
 try {
-	Object s- future.get();
-} catch (InterruptedExeception e) {
-  // 处理中断异常
-} catch(ExecutionException e) {
-  // 处理无法执行任务异常
-} finally {
-  // 关闭线程池
-  executor.shutdown();
+    String result = (String) futureResult.get();
+} catch (InterruptedException | ExecutionException e) {
+    // 处理异常
 }
+
+（1）使用方式: submit() 方法可以接受 Runnable 或 Callable 任务。如果你提交一个 Callable 任务，它可以返回一个结果。
+（2）返回值: 此方法返回一个 Future 对象，你可以用它来检查任务的状态或获取任务的结果。
+（3）异常处理: 如果在任务执行过程中发生异常，异常将被封装在 Future 对象中，你可以通过调用 Future 对象的 get() 方法来获取并处理异常。
 
 ```
 
@@ -151,8 +184,6 @@ try {
 
 shutdown()
 (1) 它将使执行器停止接受新任务，但它将继续执行所有已提交的任务
-(2) 所有在调用shutdown()方法时在执行器中排队但尚未开始执行的任务也将执行。
-(3) 所有在调用shutdown()方法时在执行器中排队但尚未开始执行的任务也将执行。
 
 shutdownNow()
 (1) 它将尝试停止所有正在执行的活动任务、暂停处理尚未开始执行的任务，并返回一个包含那些未开始执行的任务的列表。
