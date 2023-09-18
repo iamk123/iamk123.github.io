@@ -82,7 +82,11 @@ ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor (
 （3）CachedThreadPool：可根据实际情况调整线程数量
 （4）ScheduledThreadPool：该方法返回一个用来在给定的延迟后运行任务或者定期执行任务的线程池。
 
-例子：ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);
+创建方式：
+ExecutorService executorService = Executors.newSingleThreadExecutor();
+ExecutorService fixedThreadPool = Executors.newFixedThreadPool(5);
+ExecutorService executorService = Executors.newCachedThreadPool();
+ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(5);
 ```
 
 
@@ -104,7 +108,7 @@ ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor (
 （2）LinkedTransferQueue: 一种链表结构的无界传输队列，它是 TransferQueue 的一个实现，提供了更好的性能。
 ```
 
-### 线程创建工程有哪些？
+### 线程创建工厂有哪些？
 
 ```
 （1）默认的线程工厂：ThreadFactory defaultThreadFactory = Executors.defaultThreadFactory();

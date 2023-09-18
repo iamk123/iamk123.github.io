@@ -99,12 +99,14 @@ Lock接口提供了以下主要方法：
 需要注意的是，在使用Lock接口时，需要在finally代码块中释放锁，以确保锁一定会被释放，避免死锁的发生。
 ```
 
-### Lock的实现原理是什么？ TODO
+### Lock的实现原理是什么？ 
 
 ```
-Lock的实现是基于Java的AbstractQueuedSynchronizer（AQS）框架的。
-Lock接口定义了多个获取和释放锁的方法，其中比较重要的是lock()和unlock()方法。
-当一个线程调用lock()方法获取锁时，如果锁未被占用，则该线程会占用锁并继续执行；否则，该线程会进入阻塞状态，直到锁被释放。当一个线程调用unlock()方法释放锁时，会通知等待队列中的其他线程继续尝试获取锁。
+（1）lock是一个接口，用于实现线程同步，这个接口中提供了lock()、unlock()、trylock()等方法来获取和释放锁。它的常用实现类是ReentrantLock。
+（2）ReentrantLock是基于AbstractQueuedSynchronizer（AQS）来实现的。AQS维护了一个FIFO的线程等待队列，用一个state变量来表示锁的状态，来管理线程之间的同步和锁的获取/释放
+（3）整型变量state
+	- state = 0时，表示当前没有线程持有锁
+	- state > 1时，表示有线程持有锁。在 ReentrantLock是可重入锁，state 会记录重入的次数，即一个线程可以多次获得同一把锁，每次获取，state 就加 1；每次释放，state 就减 1。当 state 变为 0 时，表示锁已完全释放。
 ```
 
 ### Lock的使用方式
@@ -112,7 +114,7 @@ Lock接口定义了多个获取和释放锁的方法，其中比较重要的是l
 ```java
 public class Counter {
     private int count;
-    private Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
 
     public void increment() {
         lock.lock();
@@ -154,6 +156,16 @@ Lock和Synchronized都是Java中用于实现线程同步的机制，它们的目
 
 
 ## 队列同步器AQS  TODO
+
+[AQS原理以及AQS同步组件总结](https://juejin.cn/post/7111309162851598373)
+
+https://www.cnblogs.com/wang-meng/p/12816829.html
+
+https://zhuanlan.zhihu.com/p/543902719
+
+https://www.cnblogs.com/aspirant/p/11470858.html
+
+
 
 
 
