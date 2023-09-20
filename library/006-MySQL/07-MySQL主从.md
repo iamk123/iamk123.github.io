@@ -18,10 +18,10 @@
 <img src="https://cdn.jsdelivr.net/gh/iamk123/typora@main/uPic/2023/08/19/10523216924135521692413552454OwckKr-640-20230819105232325.png" alt="图片" style="zoom:50%;" />
 
 ```
-（1）主库的更新SQL(update、insert、delete)被写到binlog
+（1）主数据库有个bin log二进制文件，纪录了所有增删改SQL语句。
 （2）从库发起连接，连接到主库。
-（3）此时主库创建一个binlog dump thread，把bin log的内容发送到从库。
-（4）从库启动之后，创建一个I/O线程，读取主库传过来的bin log内容并写入到relay log
+（3）此时主库创建一个binlog dump线程，把bin log的内容发送到从库。
+（4）从库启动之后，创建一个I/O线程，读取主库传过来的bin log内容并写入到中继日志relay log
 （5）从库还会创建一个SQL线程，从relay log里面读取内容，从ExecMasterLog_Pos位置开始执行读取到的更新事件，将更新内容写入到slave的db
 ```
 
@@ -46,7 +46,9 @@
 一台是备库，只作为备份作用，不对外提供读写，主机挂了它就取而代之。数据从主库同步到备库。
 ```
 
-## MySQL是怎么保证主从一致的
+
+
+## MySQL是怎么保证主从一致的 TODO
 
 ```
 
