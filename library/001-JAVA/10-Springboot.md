@@ -202,3 +202,10 @@ https://www.cnblogs.com/tuyang1129/p/12878549.html
 	- 特点：可以提供较好的用户体验，因为它总是尝试将请求路由到性能最好的服务器。
 ```
 
+
+
+spring启动流程？springboot的关键注解
+
+bean的生命周期？
+
+循环依赖咋解决？用构造器方法和用setter注入都可以解决吗？
