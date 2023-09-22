@@ -562,8 +562,20 @@ equals：
 
 ### 是什么
 
-```
+```java
 就是一种参数化类型，在编写一个类、接口或方式来操作特定类型的数据时，不需要实现知道这些数据的确切类型
+
+public class Box<T> {
+    private T t;
+
+    public void set(T t) {
+        this.t = t;
+    }
+
+    public T get() {
+        return t;
+    }
+}
 ```
 
 ### 好处
@@ -672,8 +684,11 @@ Java 编译器对字符串常量直接相加的表达式进行优化，不等到
 
 ```
 在 Java 中，所有的异常都有一个共同的祖先，java.lang.Throwable,它有两个重要的子类:
-- Exception： 程序可以处理的异常。分为受检查异常、非受检查异常
-- Error：程序无法处理的错误。
+（1）Exception： 程序可以处理的异常。分为受检查异常、非受检查异常
+（2）Error：程序无法处理的错误。
+	- 栈溢出错误
+	- 内存溢出错误
+	
 ```
 
 ### Checked Exception 和 Unchecked Exception 有什么区别？

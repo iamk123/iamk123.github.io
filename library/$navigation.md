@@ -5,8 +5,9 @@
 - [Java基础](?file=001-JAVA/01-Java基础 "Java基础")
 - [集合](?file=001-JAVA/02-集合 "集合")
 - [红黑树](?file=001-JAVA/03-红黑树 "红黑树")
-- [Springboot](?file=001-JAVA/10-Springboot "Springboot")
+- [Spring](?file=001-JAVA/10-Spring "Spring")
 - [JVM](?file=001-JAVA/11-JVM "JVM")
+- [MyBatis](?file=001-JAVA/12-MyBatis "MyBatis")
 
 ##### 数据结构与算法
 - [Java基础](?file=002-数据结构与算法/000-Java基础 "Java基础")
@@ -364,6 +365,7 @@
     - [两个交替打印奇偶数](?file=008-JUC/002-场景题/02-两个交替打印奇偶数 "两个交替打印奇偶数")
     - [死锁](?file=008-JUC/002-场景题/03-死锁 "死锁")
     - [三个线程交替打印ABC](?file=008-JUC/002-场景题/04-三个线程交替打印ABC "三个线程交替打印ABC")
+    - [阻塞队列](?file=008-JUC/002-场景题/05-阻塞队列 "阻塞队列")
 
 ##### 设计模式
 - [设计模式及业务场景](?file=009-设计模式/001-设计模式及业务场景 "设计模式及业务场景")
