@@ -1,3 +1,35 @@
+
+
+### [剑指 Offer 05. 替换空格](https://leetcode.cn/problems/ti-huan-kong-ge-lcof/)
+
+```
+假定一段路径记作字符串 path，其中以 "." 作为分隔符。现需将路径加密，加密方法为将 path 中的分隔符替换为空格 " "，请返回加密后的字符串。
+
+输入：path = "a.aef.qerf.bb"
+输出："a aef qerf bb"
+```
+
+
+
+```java
+class Solution {
+    public String pathEncryption(String path) {
+        StringBuilder res = new StringBuilder();
+        for(Character c : path.toCharArray())
+        {
+            if(c == '.') res.append(' ');
+            else res.append(c);
+        }
+        return res.toString();
+    }
+}
+
+
+链接：https://leetcode.cn/problems/ti-huan-kong-ge-lcof/
+```
+
+
+
 ## 知识点
 
 -   变量名不能用`len`
@@ -23,7 +55,7 @@
 
     
 
-#### [剑指 Offer 05. 替换空格](https://leetcode.cn/problems/ti-huan-kong-ge-lcof/)
+
 
 方法一：遍历添加
 

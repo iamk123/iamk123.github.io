@@ -552,6 +552,7 @@ equals：
 ```
 两个对象相等，hashCode必须相等
 如果重写equals()而没有重写hashCode()，会导致equals方法判断是两个相等的对象，但hashCode值却不相等
+添加到HashSet等集合时就有可能可以添加多个一样的对象。
 ```
 
 
@@ -694,7 +695,11 @@ Java 编译器对字符串常量直接相加的表达式进行优化，不等到
 ### Checked Exception 和 Unchecked Exception 有什么区别？
 
 ```
-Checked Exception：Java 代码在编译过程中，如果受检查异常没有被 catch或者throws 关键字处理的话，就没办法通过编译。例如IOException
+Checked Exception：Java 代码在编译过程中，如果受检查异常没有被 catch或者throws 关键字处理的话，就没办法通过编译。
+	- IOException：表示输入/输出操作失败或中断的异常。
+	- ClassNotFoundException：当应用程序试图加载某个类时，如果找不到相应的类，则抛出此异常。
+	- NoSuchMethodException：当应用程序试图通过某个类的 getMethod 或 getDeclaredMethod 方法，调用一个不存在的方法时，抛出此异常。
+	- InterruptedException：当一个线程在等待、睡眠或是处理中被中断时，抛出此异常。
 
 Unchecked Exception：Java 代码在编译过程中 ，我们即使不处理不受检查异常也可以正常通过编译。
 - NullPointerException(空指针错误)
@@ -858,5 +863,34 @@ static void foo2(StringBuilder builder) {
 （2）Streams API：Stream API 用于处理集合对象，可以极大地简化集合对象的操作，支持顺序和并行处理。
 （3）Default 方法：在接口中可以定义具有实现的方法，而不仅仅是抽象方法，这有助于向接口添加新方法，而不破坏现有的实现。
 （4）新的日期和时间API：
+```
+
+## try-resource
+
+```java
+（1）是 Java 7 引入的一个新特性，用于简化资源的管理和关闭。这种结构确保了在 try 代码块完成时，任何打开的资源都会被正确关闭，从而避免了资源泄漏。
+（2）在传统的 try-catch-finally 结构中，开发者必须在 finally 块中明确地关闭资源。这不仅增加了代码的冗余性，而且在关闭资源时可能会出错或遗漏。
+（3）使用 try-with-resources，开发者可以更简洁、更安全地管理资源。
+
+  try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+      System.out.println(line);
+    }
+  } catch (IOException e) {
+    System.out.println("Error reading the file: " + e.getMessage());
+  }
+```
+
+## Finally里面的语句一定会执行吗？
+
+```
+finally 块中的代码是在 try 和 catch 块之后执行的，无论之前的代码块是否抛出异常
+
+不会执行的场景
+（1）System.exit(): 如果 try 或 catch 块中调用了 System.exit() 方法，JVM 将终止，而 finally 块不会被执行。
+（2）JVM崩溃: 如果JVM因为某些原因（例如OutOfMemoryError）崩溃了，finally块可能不会执行。
+（3）无限循环: 如果 try 或 catch 块包含一个无限循环，finally 块也不会执行，因为代码流程无法到达 finally 块。
+（4）线程被中断或 killed: 如果执行 try 或 catch 块的线程在进入 finally 之前被中断或 killed，那么 finally 块也可能不会执行。
 ```
 
