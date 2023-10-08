@@ -214,3 +214,62 @@ class Solution {
 }
 ```
 
+### nSum
+
+不完全正确，部分用例没过
+
+```
+[1,-2,-5,-4,-3,3,3,5] target = -11
+预期：[[-5,-4,-3,1]]
+实际：[]
+```
+
+
+
+```
+class Solution {
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        if(nums[0] > target) return res;
+        res = nSum(nums, 4, 0, target);
+        return res;
+    }
+
+     public List<List<Integer>> nSum(int[] nums, int n, int start, int target) {
+         List<List<Integer>> res = new ArrayList<>();
+         int sz = nums.length;
+         if(n < 2 || sz < n) return res;
+         if(n == 2) {
+             int l = start, r = sz - 1;
+             while(l < r) {
+                 long sum = (long)nums[l] + nums[r];
+                 if(sum < target) {
+                     l++;
+                 } else if(sum > target) {
+                     r--;
+                 } else {
+                     res.add(Arrays.asList(nums[l], nums[r]));
+                     while(l < r && nums[l] == nums[l+1]) l++;
+                     while(l < r && nums[r] == nums[r-1]) r--;
+                     l++;
+                     r--;
+                 }
+             }
+         } else {
+             for(int i = start; i < sz; i++) {
+                 List<List<Integer>> sub = nSum(nums, n - 1, i + 1, target - nums[i]);
+                 for(List<Integer> arr : sub) {
+                     List<Integer> newAns = new ArrayList<>(arr);
+                     newAns.add(nums[i]);
+                     res.add(newAns);
+                 }
+                 while(i < sz - 1 && nums[i] == nums[i + 1]) i++;
+             }
+         }
+         return res;
+     }
+}
+
+```
+
