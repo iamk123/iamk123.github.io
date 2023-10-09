@@ -101,6 +101,12 @@ Spring 框架中的 Bean 是否线程安全，取决于其作用域和状态。
 AOP是一种面向切面编程的技术，能够将那些与业务逻辑无关的，但却为业务模块共同调用的逻辑从业务代码中分离出来，封装成一个切面，然后注入到目标对象（具体业务逻辑中）中，这样就可以减少重复代码，降低模块间的耦合度，有利于拓展和维护。
 ```
 
+### 什么是通知？
+
+```
+通知就是在方法执行前或者执行后要做的动作
+```
+
 ### 通知类型有哪些？
 
 ```
@@ -164,7 +170,7 @@ https://www.cnblogs.com/tuyang1129/p/12878549.html
 https://mp.weixin.qq.com/s/mEmXaboXu48O96Yi_Kn9pw
 ```
 
-#### JDK动态代理 和 Cglib动态代理优缺点
+### JDK动态代理 和 Cglib动态代理优缺点
 
 ```
 JDK动态代理 
@@ -204,6 +210,18 @@ https://www.cnblogs.com/tuyang1129/p/12878549.html
 （1）静态代理：代理类在编译阶段就已经存在，通过手动写代理类来实现对目标对象的包装和控制
 （2）动态代理：在运行时创建代理对象，不需要手动编写代理类，而是通过一些工具库或者语言特性来实现。在java中，常用的动态代理技术有JDK动态代理、Cglib代理
 ```
+
+### Spring AOP和AspectJ AOP有什么区别？
+
+```
+Spring AOP是属于运行时增强，而AspectJ是编译时增强。Spring AOP基于代理（Proxying），而 AspectJ基于字节码操作（Bytecode Manipulation）。
+
+Spring AOP已经集成了AspectJ，AspectJ应该算得上是Java生态系统中最完整的AOP框架了。 AspectJ相比于Spring AOP功能更加强大，但是Spring AOP相对来说更简单。
+
+如果我们的切面比较少，那么两者性能差异不大。但是，当切面太多的话，最好选择AspectJ，它比 SpringAOP快很多。
+```
+
+
 
 
 

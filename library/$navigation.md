@@ -6,7 +6,6 @@
 - [集合](?file=001-JAVA/02-集合 "集合")
 - [红黑树](?file=001-JAVA/03-红黑树 "红黑树")
 - [Spring](?file=001-JAVA/10-Spring "Spring")
-- [JVM](?file=001-JAVA/11-JVM "JVM")
 - [MyBatis](?file=001-JAVA/12-MyBatis "MyBatis")
 
 ##### 数据结构与算法
